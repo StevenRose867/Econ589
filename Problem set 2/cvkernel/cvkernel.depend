@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1573238279 source:c:\users\ste\documents\econ\2nd year\econ 589\problem sets\problem set 2\cvkernel\main.cpp
+	<iostream>
+	<iomanip>
+	<math.h>
+	<fstream>
+	<string>
+	<cstdlib>
+	<vector>
+

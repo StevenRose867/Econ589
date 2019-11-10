@@ -1,0 +1,143 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{dsfont}
+
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\r}[1]{\textcolor{blue}{#1}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+
+\title{Econ 589 Econometrics: Problem set 2}
+\author{Ste Rose}
+
+\begin{document}
+
+\newtheorem{claim}{Claim}
+\newtheorem{thm}{Theorem}
+\newtheorem{mydef}{Definition}
+\maketitle
+
+\section{Question One.}
+\subsection{Part (a).}
+We consider a nonparametric kernel density estimator with standard normal kernel and fixed $n$. The bandwidth $h$ is effectively a measure of how close we want random points $\r{x}_{i}$ to be to the point for which we're estimating the density, $x$ (of course in a more sophisticated way via the use of the kernel; rather than a simple binary choice of close enough to count as the same, the kernel with the bandwidth determines a weight).
+
+If the bandwidth $h$ tends to infinity, then every point in the support is considered to be ``close enough'' to count as $x$, and in fact the argument of every entry in the sum tends to $0$. Since $k$ is continuous, the numerator in the estimator tends to $k(0)$, but the denominator $h$ tends to infinity, so that the estimator tends to 0.
+
+If the bandwidth $h$ tends to 0, then every point in the support other than $x$ (if it occurs in the random sample) is considered to be too far away to count at all as a point close to $x$, in which case both the numerator and the denominator of the estimator tend to 0. Intuitively, we expect that as the kernel is a transformation of an exponential, that the numerator tends to 0 faster than the denominator, so that the limit is 0. For all $\r{x}_{i}\neq x$, we can use the Taylor expansion of $\phi$ the normal pdf to find the limit
+\begin{equation} \lim_{h\to0} \frac{1}{h}k\left(\frac{x-\r{x}_{i}}{h}\right)=\frac{1}{\sqrt{2\pi}}\lim_{h\to0}\exp\left(-\frac{(x-\r{x}_{i})^{2}}{h^{2}}\right)\frac{1}{h}.
+\end{equation}
+By definition of the exponential function,
+\begin{equation} e^{\frac{(x-\r{x}_{i})^{2}}{h^{2}}}=1+\left(\frac{x-\r{x}_{i}}{h}\right)^{2}+O(h^{-4}),\end{equation}
+where the remainder term here is strictly positive, so that
+\begin{equation} e^{\frac{(x-\r{x}_{i})^{2}}{h^{2}}}>\left(\frac{x-\r{x}_{i}}{h}\right)^{2},\end{equation}
+and hence 
+\begin{equation} \frac{h^{2}}{(x-\r{x}_{i})^{2}}>e^{-\left(\frac{x-\r{x}_{i}}{h}\right)^{2}}>0.\end{equation}
+Clearly the limit of the left hand side divided by $h$ tends to 0, and hence our limit of interest tends to 0. In the case where the random sample does not contain a $j$ such that $\r{x}_{j}=x$, this implies that, given $n$ is fixed, the estimator tends to 0.
+
+If one is unfortunate enough to have such an $\r{x}_{j}=x$, then all terms in the sum tend to 0 except the term corresponding to $\r{x}_{j}$, which is
+\begin{equation} \frac{k(0)}{h},\end{equation}
+which tends to infinity.
+
+\subsection{Part (b).}
+We now consider the same question for the regression density estimator, which is
+\begin{equation} \r{\hat{m}}(x) = \frac{\r{\hat{a}}(x)}{\r{\hat{f}}(x)},\end{equation}
+where $\r{\hat{f}}(x)$ is our kernel density estimator and
+\begin{equation} \r{\hat{a}}(x) = \frac{1}{nh}\sum_{i\leq n} k\left(\frac{x-\r{x}_{i}}{h}\right)\r{y}_{i}.\end{equation}
+This implies that
+\begin{equation} \r{\hat{m}}(x) = \frac{\sum_{i\leq n}k\left(\frac{x-\r{x}_{i}}{h}\right)\r{y}_{i}}{\sum_{i\leq n} k\left(\frac{x-\r{x}_{i}}{h}\right)}.\end{equation}
+
+Annoyingly, it is clear that both $\r{\hat{a}}(x)$ and $\r{\hat{f}}(x)$ will tend to 0 as $h$ tends to infinity, and 0 as $h$ tends to zero if $x$ is not in the sample, and infinity if $x$ is in the sample. However, given our expression for the regression estimator, we can write
+\begin{equation} \r{\hat{m}}(x) = \sum_{i\leq n}\r{y}_{i}\frac{k\left(\frac{x-\r{x}_{i}}{h}\right)}{\sum_{j\leq n}k\left(\frac{x-\r{x}_{j}}{h}\right)}.\end{equation}
+As $h$ goes to infinity, each of these terms tend to 
+\begin{equation} \r{y}_{i}\frac{k(0)}{nk(0)},\end{equation}
+so that the estimator tends to
+\begin{equation} \frac{1}{n}\sum_{i\leq n} \r{y}_{i},\end{equation}
+which is the sample mean of $\r{y}_{i}$. 
+
+We now consider $h\to0$. The reciprocal of the factor multiplying $\r{y}_{i}$ is
+\begin{equation}\label{eqn:12} \sum_{j\leq n} \frac{k\left(\frac{x-\r{x}_{j}}{h}\right)}{k\left(\frac{x-\r{x}_{i}}{h}\right)} = 1+\sum_{j\neq i} \frac{k\left(\frac{x-\r{x}_{j}}{h}\right)}{k\left(\frac{x-\r{x}_{i}}{h}\right)}.\end{equation}
+
+We consider one of the terms in this sum,
+\begin{equation} \frac{k\left(\frac{x-\r{x}_{j}}{h}\right)}{k\left(\frac{x-\r{x}_{i}}{h}\right)} = \exp\left(\frac{1}{2h^{2}}(\r{x}_{j}-\r{x}_{i})(2x-\r{x}_{i}-\r{x}_{j})\right).\end{equation}
+If the coefficient of $h^{-2}$ is positive for any $j$, then the expression in equation (\ref{eqn:12}) tends to infinity. If this is the case for each $\r{x}_{i}$, the terms multiplying $\r{y}_{i}$ in our regression estimator all tend to 0, and hence $\r{\hat{m}}(x)$ tends to 0.
+
+The coefficient is positive if
+\begin{equation} \r{x}_{i}<\r{x}_{j}<2x-\r{x}_{i},\end{equation}
+or
+\begin{equation} 2x-\r{x}_{i}<\r{x}_{j}<\r{x}_{i}.\end{equation}
+
+If this isn't true for any $\r{x}_{j}$, then the expression in equation (\ref{eqn:12}) tends to 1, in which case $\r{y}_{i}$ is not killed by the limit, and we have
+\begin{equation} \r{\hat{m}}(x) \to \frac{1}{n}\sum_{i\leq n} \r{y}_{i}\mathds{1}\{\forall j: \r{x}_{j}<\r{x}_{i} \iff 2x\geq \r{x}_{j}+\r{x}_{i}\}.\end{equation}
+
+\section{Question Two.}
+
+
+
+
+\section{Question Three.}
+
+
+
+
+\section{Question Four.}
+
+
+
+
+\section{Question Five.}
+
+
+
+
+\section{Question Six.}
+
+
+
+
+\section{Question Seven.}
+\subsection{Part (a).}
+We consider an RDD estimator using standard kernel regression estimation, so that the parameter is an estimate of the difference of the regression estimators either side of the treatment cutoff. Since the Nadaraya-Watson estimator is upward biased if the conditional expectation $m$ is upward sloping at the boundary \cite{racine2001}, we have that the difference would be exaggerated, and hence the RDD estimate is upward biased.
+
+\subsection{Part (b).}
+Beyond new kernel's and new estimators, the only change we can make is to the data, and hence we consider transformations of the data that will reduce the boundary bias. 
+
+Our intuition as to why the boundary bias occurs for the kernel distribution estimator is that the estimator ``expects'' there to be data to both sides of the boundary point, and finding only half as many points as it expects, and hence introduces bias. One method to deal with this could be to add points to the other side of the estimator to make up for this, with the most intuitive choice of points being a reflection of the existing data. In fact, such an approach is taken by Hall and Wehrly (1991), who find using a simulation study that an estimator that reflects data across boundaries and runs as a standard kernel estimator outperforms common boundary-corrected kernels, and performs approximately as well as estimators proposed by Gasser-Muller \cite{hall1991}.
+
+
+
+\section{Question Eight.}
+
+
+
+
+\section{Question Nine.}
+We are asked to consider the advantages of the median absolute deviation as a measure of the success of an estimator in simulation studies over the root mean squared error. The definition of the median absolute deviation (hereafter MAD) is defined\cite{leys2013} as
+\begin{equation} \text{MAD} = \text{median}\left(\r{x}_{i}-\text{median}(\r{x}_{i})\right).\end{equation}
+That is, it is the median of the distribution of the data minus the median of the data.
+
+
+\section{Question Ten.}
+
+
+
+
+
+\bibliographystyle{siam}
+\bibliography{references}
+
+
+
+
+
+
+\end{document}
