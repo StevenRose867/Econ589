@@ -159,6 +159,8 @@ double bisection(kernelwdata obj, double init0, double init1, double tolerance, 
         x = (x0+x1)/2;//bisect
         if(abs(x0-x1)<tolerance)
         {
+            cout << x0 << " and " << x1 << endl;
+            cout << x0-x1 << " < " << tolerance << endl;
             cout << "h values close enough to call it a day." << endl;
             break;
         }
@@ -195,15 +197,15 @@ int main()
         incomes.observations[i]=scores[i];
     }
 
-    double sv = silverman(incomes.observations,N);
-    cout << "Silverman bandwidth is: " << sv << "." << endl;
+    //double sv = silverman(incomes.observations,N);
+    //cout << "Silverman bandwidth is: " << sv << "." << endl;
 
-    //double cvbandwidth = secantmethod(incomes,sv,0.000001,100);
-    //cout << "The cross-validation bandwidth is: " << setprecision(10) << cvbandwidth << "." << endl;
-    double cvbandwidth1 = bisection(incomes,914,1200,0.000001,1000);//inits taken from secant iterations
-    cout << "The first cross-validation bandwidth is :" << setprecision(10) << cvbandwidth1 << "." << endl;
-    double cvbandwidth2 = bisection(incomes,7000,9000,0.000001,1000);
-    cout << "The second cross-validation bandwidth is :" << setprecision(10) << cvbandwidth2 << "." << endl;
+    double cvbandwidth = secantmethod(incomes,0.075,0.000001,100);
+    cout << "The cross-validation bandwidth is: " << setprecision(10) << cvbandwidth << "." << endl;
+    //double cvbandwidth1 = bisection(incomes,914,1200,0.000001,1000);//inits taken from secant iterations
+    //cout << "The first cross-validation bandwidth is :" << setprecision(10) << cvbandwidth1 << "." << endl;
+    //double cvbandwidth2 = bisection(incomes,9000,18000,0.000001,1000);
+    //cout << "The second cross-validation bandwidth is :" << setprecision(10) << cvbandwidth2 << "." << endl;
     return 0;
 }
 

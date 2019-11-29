@@ -4,8 +4,11 @@ if (isa(h,'function_handle')==0) %turns constants into function handles so funct
     h = @(m) h;
 end
 
-assert(size(X)==size(Y),'Data does not match in size.')
+assert(isequal(size(X),size(Y)),'Data does not match in size.')
 n = length(X);
 
-kvals = k((x-X)/h(n));
+kvals = zeros(n,1);
+for i = 1:n
+    kvals(i) = k((x-X(i))/h(n));
+end
 ret = sum(kvals.*Y)/sum(kvals);
